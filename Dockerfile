@@ -17,7 +17,7 @@ RUN apk --update add nginx && \
 COPY conf/nginx/nginx-nobody-user.conf /etc/nginx/nginx.conf
 COPY 2048 ${APP_PATH}
 
-EXPOSE 80
+EXPOSE 8080
 
 # Health check option
 HEALTHCHECK CMD /usr/bin/nc 127.0.0.1 80 < /dev/null || exit 1
