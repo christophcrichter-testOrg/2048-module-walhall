@@ -36,4 +36,4 @@ jobs:
         echo "branch: ${GITHUB_REF##*/}"
         echo "image: ${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}"
         echo "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
-        curl -XPOST -H "Content-type: application/json" -d "{\"commit\": \"${GITHUB_SHA}\", \"branch\": \"${GITHUB_REF##*/}\", \"tags\": [],\"image\" : \"${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}\"}" "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
+        curl -s -w "%{http_code}" -H "Content-type: application/json" -d "{\"commit\": \"${GITHUB_SHA}\", \"branch\": \"${GITHUB_REF##*/}\", \"tags\": [],\"image\" : \"${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}\"}" "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
