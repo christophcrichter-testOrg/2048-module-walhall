@@ -4,7 +4,7 @@ on: [push]
 
 env:
   DOCKER_REGISTRY: harbor-dev.walhall.io/christoph-test
-  DOCKER_ORG: christoph-test
+  IMAGE_NAME: funny-game
 
 jobs:
   build:
@@ -22,7 +22,7 @@ jobs:
     - name: Publish image to Registry
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        name: ${{ github.repository }}
+        name: ${{ env.IMAGE_NAME }}
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         registry: ${{ env.DOCKER_REGISTRY }}
