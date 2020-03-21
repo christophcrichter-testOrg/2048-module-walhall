@@ -31,5 +31,5 @@ jobs:
 
     - name: Notify Humanitec
       run: |
-        echo "Notifying humanitec about new push for ${GITHUB_REPOSITORY}"
-        curl -XPOST -H "Content-type: application/json" -d "{\"commit\": \"${GITHUB_SHA}\", \"branch\": \"${GITHUB_REF##*/}\", \"tags\": [],\"image\" : \"${DOCKER_REGISTRY}/${GITHUB_REPOSITORY}:${GITHUB_SHA}\"}" "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
+        echo "Notifying humanitec about new push for ${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}"
+        curl -XPOST -H "Content-type: application/json" -d "{\"commit\": \"${GITHUB_SHA}\", \"branch\": \"${GITHUB_REF##*/}\", \"tags\": [],\"image\" : \"${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}\"}" "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
