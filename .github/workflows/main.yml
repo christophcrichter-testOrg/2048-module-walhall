@@ -1,39 +1,29 @@
+# This is a basic workflow to help you get started with Actions.
+
 name: CI
 
-on: [push]
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+push:
+branches: [ master ]
+pull_request:
+branches: [ master ]
 
-env:
-  DOCKER_REGISTRY: harbor-dev.walhall.io/christoph-test
-  IMAGE_NAME: funny-game
-  DOCKER_ORG: christoph-test
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  build:
-    runs-on: ubuntu-latest
+# This workflow contains a single job called "build"
+build:
+# The type of runner that the job will run on
+runs-on: ubuntu-latest
 
-    steps:
-    - uses: actions/checkout@v1
-    - name: Get the version
-      id: get_version
-      run: |
-        echo Commit: ${GITHUB_SHA}
-        echo Branch: ${GITHUB_REF##*/}
-        echo ::set-output name=COMMIT::${GITHUB_SHA}
-        echo ::set-output name=BRANCH::${GITHUB_REF##*/}
-    - name: Publish image to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      with:
-        name: ${{ env.IMAGE_NAME }}
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        registry: ${{ env.DOCKER_REGISTRY }}
-        tags: "latest,${{ steps.get_version.outputs.COMMIT }}"
-
-    - name: Notify Humanitec
-      run: |
-        echo "Notifying humanitec about new push for ${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}"
-        echo "commit: ${GITHUB_SHA}"
-        echo "branch: ${GITHUB_REF##*/}"
-        echo "image: ${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}"
-        echo "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
-        curl -s -w "%{http_code}" -H "Content-type: application/json" -d "{\"commit\": \"${GITHUB_SHA}\", \"branch\": \"${GITHUB_REF##*/}\", \"tags\": [],\"image\" : \"${DOCKER_REGISTRY}/${{ env.IMAGE_NAME }}:${GITHUB_SHA}\"}" "https://dev-api.walhall.io/orgs/${{ env.DOCKER_ORG }}/modules/${{ env.IMAGE_NAME }}/builds"
+# Steps represent a sequence of tasks that will be executed as part of the job
+steps:
+# Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+- uses: actions/checkout@v2
+  
+- name: Build and Push to Humanitec
+  uses: humanitec/build-push-to-humanitec@v1
+  with:
+    humanitec-token: ${{ secrets.HUMANITEC_TOKEN }}
+    organization: christophcrichter-test
