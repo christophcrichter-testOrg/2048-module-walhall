@@ -23,7 +23,7 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: Build and Push to Humanitec
-      uses: humanitec/build-push-to-humanitec@v1
+      uses: humanitec/build-push-to-humanitec@1.0
       with:
         humanitec-token: ${{ secrets.HUMANITEC_TOKEN }}
         organization: christophcrichter-test
